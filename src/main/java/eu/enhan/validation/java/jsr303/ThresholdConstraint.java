@@ -13,7 +13,7 @@ import javax.validation.Payload;
 @Constraint(validatedBy = {})
 public @interface ThresholdConstraint {
 
-    String message() default "{eu.enhan.validation.java.jsr303.ThresholdConstraint.message}";
+    String message() default "{ThresholdConstraint.message}";
 
     Class<?>[] groups() default {};
 
