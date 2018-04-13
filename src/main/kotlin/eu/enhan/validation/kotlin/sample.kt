@@ -110,8 +110,10 @@ fun validateKafkaConfig(config: Config): ValidatedNel<ConfigError, KafkaConfig> 
         if (rawList.isEmpty()){
             ConfigError.NoBootstrapServers.invalidNel<ConfigError, ListK<HostAndPort>>()
         } else {
-            val hostsV = rawList.withIndex().map { validateHost(it.value, it.index) }
-            hostsV.k().traverse(Validated.applicative<Nel<ConfigError>>(Nel.semigroup()), { it }).fix()
+            rawList.withIndex()
+                    .map { validateHost(it.value, it.index) }.k()
+                    .traverse(Validated.applicative<Nel<ConfigError>>(Nel.semigroup()), { it })
+                    .fix()
         }
     }.getOrHandle { it.invalidNel() }
 
