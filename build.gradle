@@ -1,10 +1,11 @@
 buildscript {
     ext.kotlin_version = '1.2.21'
 
-    ext.arrowVersion  = '0.6.1'
+    ext.arrowVersion  = '0.7.1'
 
 
     repositories {
+        jcenter()
         mavenCentral()
     }
     dependencies {
@@ -18,10 +19,12 @@ version '1.0-SNAPSHOT'
 apply plugin: 'java'
 apply plugin: 'kotlin'
 apply plugin: 'scala'
+apply plugin: 'application'
 
 sourceCompatibility = 1.8
 
 repositories {
+    jcenter()
     mavenCentral()
 }
 
@@ -39,7 +42,17 @@ dependencies {
     compile 'org.glassfish:javax.el:3.0.1-b09'
     compile 'org.hibernate.validator:hibernate-validator-cdi:6.0.8.Final'
 
+    // Arrow
+    compile 'io.arrow-kt:arrow-core:0.7.1'
+    compile 'io.arrow-kt:arrow-syntax:0.7.1'
+    compile 'io.arrow-kt:arrow-typeclasses:0.7.1'
+    compile 'io.arrow-kt:arrow-data:0.7.1'
+    compile 'io.arrow-kt:arrow-instances-core:0.7.1'
+    compile 'io.arrow-kt:arrow-instances-data:0.7.1'
+    kapt    'io.arrow-kt:arrow-annotations-processor:0.7.1'
 
+    // Scala part
+    compile 'org.typelevel:cats-core_2.12:1.1.0'
 
     compile "ch.qos.logback:logback-classic:1.2.3"
 
@@ -55,6 +68,10 @@ compileKotlin {
 }
 compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
+}
+
+tasks.withType(ScalaCompile) {
+    scalaCompileOptions.additionalParameters = ["-Ypartial-unification"]
 }
 
 test {
