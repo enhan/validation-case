@@ -1,9 +1,6 @@
 package eu.enhan.validation.kotlin
 
-import arrow.core.Either
-import arrow.core.flatMap
-import arrow.core.getOrHandle
-import arrow.core.monad
+import arrow.core.*
 import arrow.data.ListK
 import arrow.data.Nel
 import arrow.data.Validated
@@ -81,11 +78,11 @@ fun validateBusinessConfig(config: Config): ValidatedNel<ConfigError, BusinessCo
         val tb = unvalidatedTBE.bind()
         val tc = unvalidatedTCE.bind()
         if (ta < tb && tb < tc)
-            Either.right(tb)
+            Either.right(tb).bind()
         else
-            Either.left(ConfigError.ThresholdBNotInBetween(tb, ta, tc))
+            Either.left(ConfigError.ThresholdBNotInBetween(tb, ta, tc)).bind()
 
-    }.flatMap { it }
+    }.fix()
 
 
     val tAV: ValidatedNel<ConfigError, Int> = Validated.fromEither(tAe).toValidatedNel()
